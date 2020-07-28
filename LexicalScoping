@@ -1,21 +1,21 @@
-makeCacheMatrix <- function(x = matrix()) { 
-  inv <- NULL                             
-  set <- function(y) {                     
-    x <<- y                             
-    inv <<- NULL }                       
-  get <- function() x  
-  setinverse <- function(inverse) inv <<- inverse  
-  getinverse <- function() inv                     
-  list(set = set, get = get, setinverse = setinverse, getinverse = getinverse)
+makeCacheMatrix <- function(x = matrix()) {                ## define the argument with default mode of "matrix"
+  inv <- NULL                                              ## initialize inv as NULL; will hold value of matrix inverse
+  set <- function(y) {                                     ## define the set function to assign new
+    x <<- y                                                ## value of matrix in parent environment
+    inv <<- NULL }                                         ## if there is a new matrix, reset inv to NULL
+  get <- function() x                                      ## define the get fucntion - returns value of the matrix argument
+  setinverse <- function(inverse) inv <<- inverse          ## assigns value of inv in parent environment
+  getinverse <- function() inv                             ## gets the value of inv where called
+  list(set = set, get = get, setinverse = setinverse, getinverse = getinverse)   ## you need this in order to refer
 }
 cacheSolve <- function(x, ...) {
-  inv <- x$getinverse()
-  if(!is.null(inv)) {
-    message("getting cached data")
-    return(inv)
-  }
-  data <- x$get()
-  inv <- solve(data, ...)
-  x$setinverse(inv)
-  inv
+  inv <- x$getinverse()            
+  if(!is.null(inv)) {                                      ##if inverse matrix is not NULL
+    message("getting cached data")                         ##Type message: Getting Cached Invertible Matrix
+    return(inv)                                            ##return the invertible matrix
+  }                                                        ##if value of the invertible matrix is NULL then
+  data <- x$get()                                          ##get the original Matrix Data                                  
+  inv <- solve(data, ...)                                  ##use solve function to inverse the matrix
+  x$setinverse(inv)                                        ##set the invertible matrix
+  inv                                                      ##return the invertible matrix
 }
